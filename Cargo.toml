@@ -1,0 +1,10 @@
+[package]
+name = "kleya"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = "0.8.8"
+rusqlite = "0.38.0"
+serde = "1.0.228"
+tokio = "1.49.0"
