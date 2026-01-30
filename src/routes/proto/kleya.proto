@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+package kleya;
+
+// Registers a new node to Kleya network
+service Register {
+  // Response contains callback information to backregister the target node
+  rpc KleyaRegister (KleyaRegisterRequest) returns (KleyaRegisterResponse);
+}
+
+message KleyaRegisterRequest {
+  KleyaNode node_info = 1;
+}
+
+message KleyaRegisterResponse {
+  KleyaNodeList  node_list       = 1;
+  RegisterStatus register_status = 2;
+  string         message         = 3; // optional human-readable info
+}
+
+enum RegisterStatus {
+  REGISTER_STATUS_UNSPECIFIED = 0;
+  REGISTERED                  = 1;
+  ALREADY_REGISTERED          = 2;
+  REGISTER_ERROR              = 3;
+}
+
+message KleyaNode {
+  string node_id      = 1;
+  string node_name    = 2;
+  string node_address = 3;
+  uint64 quota_bytes  = 4;
+}
+
+message KleyaNodeList {
+  repeated KleyaNode nodes = 1;
+}
+
+// Sends heartbeat signals to Kleya network
+service Heartbeat {
+  // Sends heartbeat signal to Kleya network
+  rpc KleyaHeartbeat (KleyaHeartbeatRequest) returns (KleyaHeartbeatResponse);
+}
+
+message KleyaHeartbeatRequest {
+  KleyaNode node_info = 1;
+}
+
+message KleyaHeartbeatResponse {
+  KleyaNode       node_info        = 1;
+  HeartbeatStatus heartbeat_status = 2;
+  string          message          = 3;
+}
+
+enum HeartbeatStatus {
+  HEARTBEAT_STATUS_UNSPECIFIED = 0;
+  OK                           = 1;
+  NODE_UNREACHABLE             = 2;
+  ERROR                        = 3;
+}
+
+// Relays heartbeat signals to Kleya network
+service HeartbeatRelay {
+  // Relays heartbeat signal to Kleya network
+  rpc KleyaHeartbeatRelay (KleyaHeartbeatRelayRequest) returns (KleyaHeartbeatRelayResponse);
+}
+
+message KleyaHeartbeatRelayRequest {
+  KleyaHeartbeatRequest node_info  = 1;
+  KleyaNode             relay_node = 2;
+}
+
+message KleyaHeartbeatRelayResponse {
+  KleyaHeartbeatResponse node_info    = 1;
+  RelayStatus            relay_status = 2;
+  string                 message      = 3;
+}
+
+enum RelayStatus {
+  RELAY_STATUS_UNSPECIFIED = 0;
+  RELAYED                  = 1;
+  REJECTED                 = 2;
+  RELAY_ERROR              = 3;
+}
