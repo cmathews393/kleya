@@ -6,7 +6,7 @@ FROM rust:1-${VARIANT}
 
 
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends <your-package-list-here>
+    && apt-get -y install --no-install-recommends curl git build-essential cmake pkg-config libssl-dev
 
 
 RUN git clone https://github.com/cmathews393/kleya.git /kleya
